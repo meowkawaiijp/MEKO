@@ -2,7 +2,7 @@ import sounddevice as sd
 import numpy as np
 from pythonosc import dispatcher, osc_server
 from threading import Thread
-
+import socket
 #あくまで動作検証用のコード後々高性能化
 
 delay_time = 0.5      # ディレイタイム（秒）
@@ -56,7 +56,7 @@ dispatcher.map("/delay/feedback", set_delay_feedback)
 dispatcher.map("/reverb/amount", set_reverb_amount)
 
 def start_osc_server():
-    server = osc_server.ThreadingOSCUDPServer(("192.168.0.22", 8000), dispatcher)
+    server = osc_server.ThreadingOSCUDPServer(("0.0.0.0", 8000), dispatcher)
     print(f"OSC Server is running on {server.server_address}")
     server.serve_forever()
 
