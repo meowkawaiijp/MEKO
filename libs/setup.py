@@ -18,7 +18,7 @@ class setup():
         self.input_samplerate = sd.query_devices(self.input_device)['default_samplerate']
         self.output_samplerate = sd.query_devices(self.output_device)['default_samplerate']
         print(f"input samplerate: {self.input_samplerate} output samplerate: {self.output_samplerate}")
-        if self.input_samplerate != selfoutput_samplerate:
+        if self.input_samplerate != self.output_samplerate:
             ValueError("input samplerateとoutputsamplerateの値が一致しません。")
         self.sample_rate = int(self.input_samplerate)
         self.buffer_size = int(self.sample_rate * 2)

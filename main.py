@@ -3,7 +3,8 @@ import numpy as np
 from pythonosc import dispatcher, osc_server
 from threading import Thread
 import socket
-from libs import server,effect_setup,setup
+from libs import setup
+from libs.osc import server
 import time
 #----------------------------
 #ラズパイの方でspiの有効化をする。
@@ -26,7 +27,9 @@ def audio_callback(indata, outdata, frames, time, status):
 #      output_signal = input_signal + delayed_signal + reverb_signal
 #      outdata[:, 0] = output_signal
 def main():
- input_device,output_device = setup().select_device()
+ s = setup.setup()
+ input_device,output_device = s.select_device()
+ input_samplerate,output_samplerate,sample_rate,buffer_size =s.device_setup()
  stream = sd.Stream(
      samplerate=sample_rate,
      channels=1,  # モノラル
@@ -36,7 +39,7 @@ def main():
      device=(input_device, output_device) 
  )
  stream.start()
- osc_thread = Thread(target=start_osc_server, daemon=True)
+ osc_thread = Thread(target=server.server().start, daemon=True)
  osc_thread.start()
  try:
     print("Processing audio... Press Ctrl+C to stop.")
@@ -47,3 +50,5 @@ def main():
     print("Exiting...")
     stream.stop()
     stream.close()
+if __name__ == "__main__":
+    main()
