@@ -47,6 +47,7 @@ dev:
 - [ ] Optimize performance for Raspberry Pi and other low-power devices.
 - [ ] Add MIDI support for external control.
 - [ ] Enable effect presets for quick switching.
+- [ ] Add support for external switches (e.g., foot switches) for real-time effect control.
 
 ---
 
