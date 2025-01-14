@@ -4,6 +4,10 @@ from pythonosc import dispatcher, osc_server
 from threading import Thread
 import socket
 from libs import server,effect_setup,setup
+import time
+#----------------------------
+#ラズパイの方でspiの有効化をする。
+#----------------------------
 def audio_callback(indata, outdata, frames, time, status):
      global delay_buffer, reverb_buffer
      if status:
@@ -21,7 +25,7 @@ def audio_callback(indata, outdata, frames, time, status):
 #      output_signal = input_signal + delayed_signal + reverb_signal
 #      outdata[:, 0] = output_signal
 def main():
- input_device,output_device = 
+ input_device,output_device = setup().select_device()
  stream = sd.Stream(
      samplerate=sample_rate,
      channels=1,  # モノラル
@@ -36,6 +40,7 @@ def main():
  try:
     print("Processing audio... Press Ctrl+C to stop.")
     while True:
+        time.sleep(0.1)
         pass
  except KeyboardInterrupt:
     print("Exiting...")
