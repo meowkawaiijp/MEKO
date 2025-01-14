@@ -7,6 +7,7 @@ from libs import server,effect_setup,setup
 import time
 #----------------------------
 #ラズパイの方でspiの有効化をする。
+#ipadosのtouchoscを購入する。
 #----------------------------
 def audio_callback(indata, outdata, frames, time, status):
      global delay_buffer, reverb_buffer
