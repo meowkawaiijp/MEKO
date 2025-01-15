@@ -1,17 +1,12 @@
 import sounddevice as sd
-import numpy as np
-from pythonosc import dispatcher, osc_server
 from threading import Thread
-import socket
 from libs import setup
 from libs.osc import server
 import time
-from effectors import effect
+from libs import effect
 import numpy as np
 import sounddevice as sd
-from wave import Wave_read, open
 from threading import Thread
-from enum import Enum
 #----------------------------
 #ラズパイの方でspiの有効化をする。
 #ipadosのtouchoscを購入する。
@@ -26,19 +21,19 @@ def main():
      channels=1,  # モノラル
      dtype='float32',
      latency='low',
-     callback=effect.audio_callback,
+     callback=effect.effect().audio_callback,
      device=(input_device, output_device) 
  )
  stream.start()
  osc_thread = Thread(target=server.server().start, daemon=True)
  osc_thread.start()
  try:
-    print("Processing audio... Press Ctrl+C to stop.")
+    print("オーディオを処理しています... 中止するには Ctrl+C を押してください。")
     while True:
         time.sleep(0.1)
         pass
  except KeyboardInterrupt:
-    print("Exiting...")
+    print("終了します...")
     stream.stop()
     stream.close()
 if __name__ == "__main__":

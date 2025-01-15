@@ -2,7 +2,6 @@ import serial
 import spidev
 from time import sleep
 import RPi.GPIO as GPIO
-import os
 import subprocess
 
 #------------------
