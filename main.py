@@ -3,7 +3,7 @@ from threading import Thread
 from libs import setup
 from libs.osc import server
 import time
-from effectors import effect
+from libs import effect
 import numpy as np
 import sounddevice as sd
 from threading import Thread
@@ -28,12 +28,12 @@ def main():
  osc_thread = Thread(target=server.server().start, daemon=True)
  osc_thread.start()
  try:
-    print("Processing audio... Press Ctrl+C to stop.")
+    print("オーディオを処理しています... 中止するには Ctrl+C を押してください。")
     while True:
         time.sleep(0.1)
         pass
  except KeyboardInterrupt:
-    print("Exiting...")
+    print("終了します...")
     stream.stop()
     stream.close()
 if __name__ == "__main__":
