@@ -1,17 +1,12 @@
 import sounddevice as sd
-import numpy as np
-from pythonosc import dispatcher, osc_server
 from threading import Thread
-import socket
 from libs import setup
 from libs.osc import server
 import time
 from effectors import effect
 import numpy as np
 import sounddevice as sd
-from wave import Wave_read, open
 from threading import Thread
-from enum import Enum
 #----------------------------
 #ラズパイの方でspiの有効化をする。
 #ipadosのtouchoscを購入する。
