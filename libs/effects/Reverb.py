@@ -1,6 +1,6 @@
 import numpy as np
 class Reverb:
-    def __init__(self, reverb_amount=0.5):
+    def __init__(self, reverb_amount=1.5):
         self.reverb_amount = reverb_amount
 
     def set_parameters(self, reverb_amount):

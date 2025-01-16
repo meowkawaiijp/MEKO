@@ -19,11 +19,11 @@ class effect():
             "effects_chain": [
                 {"name": "NoiseGate", "enabled": False, "params": {"threshold": 0.02}},
                 {"name": "Phaser", "enabled": False, "params": {"rate": 0.5, "depth": 0.7}},
-                {"name": "Distortion", "enabled": True, "params": {"drive": 10, "intensity": 1.0, "cutoff_freq": 8000, "fs": 44100, "apply_lowpass": True}},
+                {"name": "Distortion", "enabled": False, "params": {"drive": 10, "intensity": 1.0, "cutoff_freq": 8000, "fs": 44100, "apply_lowpass": True}},
                 {"name": "Compressor", "enabled": False, "params": {"threshold": 0.5, "ratio": 4.0}},
                 {"name": "Equalizer", "enabled": False, "params": {"lowcut": 100.0, "highcut": 1000.0, "fs": 44100}},
                 {"name": "Delay", "enabled": False, "params": {"delay_time": 0.5, "feedback": 0.5}},
-                {"name": "Reverb", "enabled": False, "params": {"reverb_amount": 0.5}},
+                {"name": "Reverb", "enabled": True, "params": {"reverb_amount": 0.5}},
                 {"name": "AutoWah", "enabled": False, "params": {"mod_freq": 1.0}}
             ]
         }
@@ -55,24 +55,45 @@ class effect():
     def save_settings(self, settings):
         with open(self.SETTINGS_FILE, "w") as file:
             json.dump(settings, file, indent=4)
-
+    def check_enabled(self,effects_list, effect_class):
+        """
+    任意のエフェクトクラスのenabled状態をチェックする関数
+    :param effects_list: エフェクトのリスト
+    :param effect_class: チェックしたいエフェクトのクラス
+    :return: enabled状態
+        """
+        effect_item = next((item for item in effects_list if isinstance(item['effect'], effect_class)), None)
+        if effect_item is not None:
+            return effect_item['enabled']
+        else:
+            return None  # エフェクトがリストにない場合
     def audio_callback(self, indata, outdata, frames, time, status):
-    # if status:
-    #     print(f"ステータスエラー: {status}")
+        if status:
+         print(f"ステータスエラー: {status}")
         self.settings = self.load_settings()
         self.effects_chain = [
         {"effect": self.effects_instances[entry["name"]], "enabled": entry["enabled"]}
         for entry in self.settings["effects_chain"]
     ]
         processed = np.zeros_like(indata)
+        volume_change = 1.0
         for channel in range(indata.shape[1]):
             signal = indata[:, channel]
             for effect_entry in self.effects_chain:
                 if effect_entry["enabled"]:
                     signal = effect_entry["effect"].apply(signal)
             processed[:, channel] = signal
-        outdata[:] = processed * self.base_volume
-
+        if self.check_enabled(self.effects_chain, Distortion):
+            #print("Distortion is enabled")
+            volume_change = 25.0
+        # elif self.check_enabled(self.effects_chain, Reverb):
+        #     print("Reverb is enabled")
+        #     volume_change = 10.0
+        # elif self.check_enabled(self.effects_chain, Reverb) and self.check_enabled(self.effects_chain, Distortion):
+        #     print("Reverb and Distortion are enabled")
+        #     volume_change = 50.0
+        #print(f"Volume change: {volume_change}")
+        outdata[:] = processed * self.base_volume / volume_change
 
     def set_effect_state(self, effect_name, enabled):
         for entry in self.effects_chain:

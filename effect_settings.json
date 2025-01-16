@@ -1,0 +1,75 @@
+{
+    "base_volume": 1.0,
+    "effects_chain": [
+        {
+            "name": "NoiseGate",
+            "enabled": false,
+            "params": {
+                "threshold": 0.02
+            }
+        },
+        {
+            "name": "Phaser",
+            "enabled": false,
+            "params": {
+                "rate": 0.5,
+                "depth": 0.7,
+                "fs": 44100
+            }
+        },
+        {
+            "name": "Distortion",
+            "enabled": true,
+            "params": {
+                "drive": 25,
+                "intensity": 2.0,
+                "cutoff_freq": 8000,
+                "fs": 44100,
+                "apply_lowpass": false,
+                "release_factor": 0.85
+            }
+        },
+        {
+            "name": "Compressor",
+            "enabled": false,
+            "params": {
+                "threshold": 0.5,
+                "ratio": 4.0
+            }
+        },
+        {
+            "name": "Equalizer",
+            "enabled": false,
+            "params": {
+                "lowcut": 100.0,
+                "highcut": 1000.0,
+                "fs": 44100,
+                "order": 5
+            }
+        },
+        {
+            "name": "Delay",
+            "enabled": false,
+            "params": {
+                "delay_time": 0.5,
+                "feedback": 0.5,
+                "fs": 44100
+            }
+        },
+        {
+            "name": "Reverb",
+            "enabled": false,
+            "params": {
+                "reverb_amount": 1.6
+            }
+        },
+        {
+            "name": "AutoWah",
+            "enabled": false,
+            "params": {
+                "mod_freq": 1.0,
+                "fs": 44100
+            }
+        }
+    ]
+}
