@@ -62,14 +62,13 @@ class Distortion:
         # 入力信号の正規化
         input_signal = np.clip(input_signal, -1.0, 1.0)  # -1.0～1.0にクリップ
 
-        # 増幅
+        # 増幅（非線形特性を含む）
         amplified = input_signal * self.drive
-        amplified = np.clip(amplified, -1.0, 1.0)  # 増幅後にクリップして音量が大きくなりすぎないように
+        amplified = np.sign(amplified) * (1 - np.exp(-np.abs(amplified)))
 
         # ソフトクリッピング
         distorted = np.tanh(amplified * self.intensity)
 
-        # ローパスフィルタを適用（オプション）
         if self.apply_lowpass:
             distorted = self.lowpass_filter(distorted)
 
@@ -77,9 +76,8 @@ class Distortion:
         distorted = self.apply_envelope(distorted)
 
         # 出力信号の振幅を調整してクリッピング
-        output = distorted / np.max(np.abs(distorted)) if np.max(np.abs(distorted)) > 0 else distorted
-        
-        # 音量を1/100に減少
-        #output = output / 100.0
+        max_amplitude = np.max(np.abs(distorted))
+        if max_amplitude > 0:
+            distorted /= max_amplitude
 
-        return np.clip(output, -1.0, 1.0)  # 最終的に-1.0～1.0にクリップ
+        return np.clip(distorted, -1.0, 1.0)  # 最終的に-1.0～1.0にクリップ

@@ -21,7 +21,7 @@ def main():
      channels=1,  # モノラル
      dtype='float32',
      latency='low',
-     callback=effect.effect().audio_callback,
+     callback=effect.EffectProcessor().audio_callback,
      device=(input_device, output_device) 
  )
  stream.start()
